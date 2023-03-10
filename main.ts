@@ -404,7 +404,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorDarkDiamond, functio
             story.printCharacterText("Back to the beginning I guess.", "You")
         })
         timer.after(5000, function () {
-            tiles.setCurrentTilemap(tilemap`level3`)
+            tiles.setCurrentTilemap(tilemap`level6`)
             mySprite.setPosition(248, 249)
         })
     }
@@ -488,9 +488,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
             controller.moveSprite(mySprite, 100, 100)
         })
     }
-})
-scene.onOverlapTile(SpriteKind.Player, assets.tile`transparency16`, function (sprite, location) {
-	
 })
 let lastDirection = 0
 let mySprite: Sprite = null
