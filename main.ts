@@ -396,19 +396,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite, lo
     })
     tiles.setTileAt(location, sprites.dungeon.floorLight0)
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorDarkDiamond, function (sprite, location) {
-    if (HasKey1 == 3) {
-        HasKey1 = 4
-        story.startCutscene(function () {
-            story.printCharacterText("Hey, the key fits!", "You")
-            story.printCharacterText("Back to the beginning I guess.", "You")
-        })
-        timer.after(5000, function () {
-            tiles.setCurrentTilemap(tilemap`level6`)
-            mySprite.setPosition(248, 249)
-        })
-    }
-})
 function Starter_Dialogue (Dialogue_Enabled: boolean) {
     if (Dialogue_Enabled) {
         waitTime = 2000
@@ -453,9 +440,19 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
         })
     }
     if (HasKey1 == 2) {
-        HasKey1 = 3
+        game.showLongText("You may only choose one", DialogLayout.Bottom)
         story.startCutscene(function () {
-            story.printCharacterText("Hey, another key!", "You")
+            story.showPlayerChoices("The Shield - The Maze Section expands and you are trapped there for the rest of the game exploring the rest of its secrets.", "The Key - You may escape this section and move on to the main adventure.")
+            if (story.checkLastAnswer("The Shield - The Maze Section expands and you are trapped there for the rest of the game exploring the rest of its secrets.")) {
+                story.startCutscene(function () {
+                    story.printCharacterText("Hey, a shield!", "You")
+                })
+            } else if (story.checkLastAnswer("The Key - You may escape this section and move on to the main adventure.")) {
+                HasKey1 = 3
+                story.startCutscene(function () {
+                    story.printCharacterText("Hey, another key!", "You")
+                })
+            }
         })
     }
 })
@@ -486,6 +483,19 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
         })
         timer.after(2000, function () {
             controller.moveSprite(mySprite, 100, 100)
+        })
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (sprite, location) {
+    if (HasKey1 == 3) {
+        HasKey1 = 4
+        story.startCutscene(function () {
+            story.printCharacterText("Hey, the key fits!", "You")
+            story.printCharacterText("Back to the beginning I guess.", "You")
+        })
+        timer.after(5000, function () {
+            tiles.setCurrentTilemap(tilemap`level6`)
+            mySprite.setPosition(248, 249)
         })
     }
 })
@@ -522,6 +532,8 @@ tiles.setCurrentTilemap(tilemap`level0`)
 info.setLife(3)
 scene.cameraFollowSprite(mySprite)
 mySprite.setPosition(248, 249)
+// Remove on launch
+// 
 controller.moveSprite(mySprite, 100, 100)
 game.onUpdate(function () {
     Animation_Handler()
