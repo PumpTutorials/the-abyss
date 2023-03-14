@@ -831,12 +831,20 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
                 ShieldEquipped = true
                 tiles.setCurrentTilemap(tilemap`level11`)
                 story.startCutscene(function () {
+                    Dialogue = 0
                     story.printCharacterText("Hey, a shield!", "You")
+                })
+                timer.after(3000, function () {
+                    Dialogue = 1
                 })
             } else if (story.checkLastAnswer("The Key - You may escape this section and move on to the main adventure.")) {
                 HasKey1 = 3
                 story.startCutscene(function () {
+                    Dialogue = 0
                     story.printCharacterText("Hey, another key!", "You")
+                })
+                timer.after(3000, function () {
+                    Dialogue = 1
                 })
             }
         })
