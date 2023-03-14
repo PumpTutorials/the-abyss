@@ -460,10 +460,12 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight1, function (sp
     tiles.setTileAt(location, sprites.dungeon.floorLight0)
     controller.moveSprite(mySprite, 0, 0)
     story.startCutscene(function () {
+        Dialogue = 0
         story.printCharacterText("What does this do?", "You")
     })
     timer.after(2000, function () {
         controller.moveSprite(mySprite, 100, 100)
+        Dialogue = 1
     })
     tiles.setCurrentTilemap(tilemap`level3`)
 })
@@ -477,12 +479,12 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
     if (HasKey1 == 1) {
         HasKey1 = 2
         tiles.setCurrentTilemap(tilemap`level5`)
-        controller.moveSprite(mySprite, 0, 0)
         story.startCutscene(function () {
+            Dialogue = 0
             story.printCharacterText("What just happened?!", "You")
         })
         timer.after(2000, function () {
-            controller.moveSprite(mySprite, 100, 100)
+            Dialogue = 1
         })
     }
 })
@@ -490,12 +492,14 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (spr
     if (HasKey1 == 3) {
         HasKey1 = 4
         story.startCutscene(function () {
+            Dialogue = 0
             story.printCharacterText("Hey, the key fits!", "You")
             story.printCharacterText("Back to the beginning I guess.", "You")
         })
         timer.after(5000, function () {
             tiles.setCurrentTilemap(tilemap`level6`)
             mySprite.setPosition(248, 249)
+            Dialogue = 1
         })
     }
 })
@@ -504,6 +508,8 @@ let mySprite: Sprite = null
 let HasKey1 = 0
 let Already_Triggered1 = 0
 let waitTime = 0
+let Dialogue = 0
+Dialogue = 1
 Starter_Dialogue(false)
 waitTime = 0
 Already_Triggered1 = 0
@@ -537,4 +543,9 @@ mySprite.setPosition(248, 249)
 controller.moveSprite(mySprite, 100, 100)
 game.onUpdate(function () {
     Animation_Handler()
+    if (story.isMenuOpen() || Dialogue == 0) {
+        controller.moveSprite(mySprite, 0, 0)
+    } else if (!(story.isMenuOpen()) && Dialogue == 1) {
+        controller.moveSprite(mySprite, 100, 100)
+    }
 })
