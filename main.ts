@@ -780,13 +780,34 @@ function Animation_Handler () {
         }
     }
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, location) {
+    if (ReadyForBoss) {
+        scene.setBackgroundColor(15)
+        tiles.setCurrentTilemap(tilemap`level7`)
+        OrbEquipped = true
+        Dialogue = 0
+        story.startCutscene(function () {
+            story.printCharacterText("WHATS HAPPENING!", "You")
+        })
+        timer.after(2500, function () {
+            game.splash("How did you get here?")
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
+            game.splash("Somethings wrong...", "What did you do?!")
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
+            game.splash("I apologize but you", "need to leave.")
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
+            game.splash("G o o d  B y e")
+            music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.UntilDone)
+        })
+    }
+})
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, location) {
     if (!(OrbEquipped)) {
         OrbEquipped = true
         tiles.setTileAt(location, assets.tile`chestOpened1`)
         Dialogue = 0
         mySprite.sayText("Hm, what is this?", 1000, false)
-        timer.after(3000, function () {
+        timer.after(1500, function () {
             tiles.setWallAt(location, true)
             tiles.setTileAt(location, assets.tile`myTile3`)
             Dialogue = 1
@@ -920,10 +941,14 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     if (!(ReadyForBoss)) {
         music.play(music.melodyPlayable(music.smallCrash), music.PlaybackMode.InBackground)
         tiles.setTileAt(tiles.locationInDirection(location, CollisionDirection.Top), sprites.dungeon.purpleSwitchDown)
+        Dialogue = 0
         story.startCutscene(function () {
             story.printCharacterText("F I N D   M E", "?????????")
         })
         ReadyForBoss = true
+        timer.after(2000, function () {
+            Dialogue = 1
+        })
     }
 })
 let lastDirection = 0
