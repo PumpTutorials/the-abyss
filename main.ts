@@ -882,8 +882,11 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
         })
     }
 })
+scene.onOverlapTile(SpriteKind.Player, assets.tile`transparency16`, function (sprite, location) {
+	
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (sprite, location) {
-    if (HasKey1 == 3) {
+    if (HasKey1 == 3 && !(ShieldEquipped)) {
         HasKey1 = 4
         story.startCutscene(function () {
             Dialogue = 0
