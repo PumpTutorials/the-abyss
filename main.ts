@@ -785,7 +785,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, l
         OrbEquipped = true
         tiles.setTileAt(location, assets.tile`chestOpened1`)
         Dialogue = 0
-        mySprite.sayText("Hm, what is this?")
+        mySprite.sayText("Hm, what is this?", 1000, false)
         timer.after(3000, function () {
             tiles.setWallAt(location, true)
             tiles.setTileAt(location, assets.tile`myTile3`)
@@ -909,6 +909,22 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (spr
             Dialogue = 1
         })
     }
+    if (ReadyForBoss) {
+        music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.InBackground)
+        tiles.setWallAt(tiles.locationInDirection(location, CollisionDirection.Left), false)
+        tiles.setTileAt(location, assets.tile`myTile1`)
+        tiles.replaceAllTiles(sprites.dungeon.doorLockedWest, sprites.dungeon.doorOpenWest)
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
+    if (!(ReadyForBoss)) {
+        music.play(music.melodyPlayable(music.smallCrash), music.PlaybackMode.InBackground)
+        tiles.setTileAt(tiles.locationInDirection(location, CollisionDirection.Top), sprites.dungeon.purpleSwitchDown)
+        story.startCutscene(function () {
+            story.printCharacterText("F I N D   M E", "?????????")
+        })
+        ReadyForBoss = true
+    }
 })
 let lastDirection = 0
 let mySprite: Sprite = null
@@ -918,6 +934,8 @@ let waitTime = 0
 let Dialogue = 0
 let ShieldEquipped = false
 let OrbEquipped = false
+let ReadyForBoss = false
+ReadyForBoss = false
 let DebugText = 0
 OrbEquipped = false
 ShieldEquipped = false
