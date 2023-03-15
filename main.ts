@@ -780,6 +780,19 @@ function Animation_Handler () {
         }
     }
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, location) {
+    if (!(OrbEquipped)) {
+        OrbEquipped = true
+        tiles.setTileAt(location, assets.tile`chestOpened1`)
+        Dialogue = 0
+        mySprite.sayText("Hm, what is this?")
+        timer.after(3000, function () {
+            tiles.setWallAt(location, true)
+            tiles.setTileAt(location, assets.tile`myTile3`)
+            Dialogue = 1
+        })
+    }
+})
 function Starter_Dialogue (Dialogue_Enabled: boolean) {
     if (Dialogue_Enabled) {
         waitTime = 2000
@@ -834,7 +847,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
                     Dialogue = 0
                     story.printCharacterText("Hey, a shield!", "You")
                 })
-                timer.after(3000, function () {
+                timer.after(3500, function () {
                     Dialogue = 1
                 })
             } else if (story.checkLastAnswer("The Key - You may escape this section and move on to the main adventure.")) {
@@ -875,15 +888,12 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
         tiles.setCurrentTilemap(tilemap`level5`)
         story.startCutscene(function () {
             Dialogue = 0
-            story.printCharacterText("What just happened?!", "You")
+            story.printCharacterText("What is this place?", "You")
         })
         timer.after(2000, function () {
             Dialogue = 1
         })
     }
-})
-scene.onOverlapTile(SpriteKind.Player, assets.tile`transparency16`, function (sprite, location) {
-	
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (sprite, location) {
     if (HasKey1 == 3 && !(ShieldEquipped)) {
@@ -907,14 +917,17 @@ let Already_Triggered1 = 0
 let waitTime = 0
 let Dialogue = 0
 let ShieldEquipped = false
+let OrbEquipped = false
+let DebugText = 0
+OrbEquipped = false
 ShieldEquipped = false
 Dialogue = 1
-Starter_Dialogue(false)
 waitTime = 0
+Starter_Dialogue(false)
 Already_Triggered1 = 0
 HasKey1 = 0
 let Lever = 0
-scene.setBackgroundColor(15)
+scene.setBackgroundColor(13)
 mySprite = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f e e e e f f . . . . 
