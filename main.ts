@@ -782,10 +782,11 @@ function Animation_Handler () {
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, location) {
     if (ReadyForBoss) {
+        mySprite.setFlag(SpriteFlag.Invisible, true)
+        controller.moveSprite(mySprite, 0, 0)
         scene.setBackgroundColor(15)
         tiles.setCurrentTilemap(tilemap`level7`)
         OrbEquipped = true
-        Dialogue = 0
         story.startCutscene(function () {
             story.printCharacterText("WHATS HAPPENING!", "You")
         })
@@ -794,10 +795,23 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, l
             music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
             game.splash("Somethings wrong...", "What did you do?!")
             music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
-            game.splash("I apologize but you", "need to leave.")
+            game.splash("I apologize for what", "is about to happen")
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
+            game.splash("You will now take my place", "in The Abyss")
             music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
             game.splash("G o o d  B y e")
             music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.UntilDone)
+            story.startCutscene(function () {
+                story.printCharacterText("Wait, No! Don’t do this!!", "You")
+            })
+            timer.after(2500, function () {
+                mySprite.setPosition(89, 63)
+                color.setPalette(
+                color.GrayScale
+                )
+                mySprite.setFlag(SpriteFlag.Invisible, false)
+                tiles.setCurrentTilemap(tilemap`level8`)
+            })
         })
     }
 })
