@@ -923,7 +923,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
         tiles.setCurrentTilemap(tilemap`level5`)
         story.startCutscene(function () {
             Dialogue = 0
-            story.printCharacterText("What is this place?", "You")
+            story.printCharacterText("What is this place? Looks like some kind of maze.", "You")
         })
         timer.after(2000, function () {
             Dialogue = 1
@@ -933,15 +933,16 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sp
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (sprite, location) {
     if (HasKey1 == 3 && !(ShieldEquipped)) {
         HasKey1 = 4
+        tiles.setCurrentTilemap(tilemap`level6`)
+        mySprite.setPosition(248, 249)
+        Dialogue = 1
         story.startCutscene(function () {
-            Dialogue = 0
-            story.printCharacterText("Hey, the key fits!", "You")
-            story.printCharacterText("Back to the beginning I guess.", "You")
+            story.printCharacterText("Something’s off, this place looks…", "You")
+            story.printCharacterText("Corrupt.", "You")
         })
-        timer.after(5000, function () {
-            tiles.setCurrentTilemap(tilemap`level6`)
-            mySprite.setPosition(248, 249)
-            Dialogue = 1
+        timer.after(2500, function () {
+            ReadyForBoss += 1
+            Dialogue = 0
         })
     }
     if (ReadyForBoss) {
