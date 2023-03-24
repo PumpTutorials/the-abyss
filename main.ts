@@ -805,6 +805,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, l
                 story.printCharacterText("Wait, No! Don’t do this!!", "You")
             })
             timer.after(2500, function () {
+                scene.setBackgroundColor(12)
                 mySprite.setPosition(89, 63)
                 color.setPalette(
                 color.GrayScale
@@ -830,6 +831,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, l
 })
 function Starter_Dialogue (Dialogue_Enabled: boolean) {
     if (Dialogue_Enabled) {
+        controller.moveSprite(mySprite, 0, 0)
         waitTime = 2000
         game.splash("Welcome to the Abyss.")
         music.play(music.melodyPlayable(music.knock), music.PlaybackMode.UntilDone)
@@ -858,8 +860,8 @@ function Starter_Dialogue (Dialogue_Enabled: boolean) {
         story.startCutscene(function () {
             story.printCharacterText("Where am I?", "You")
         })
-        timer.after(waitTime, function () {
-            controller.moveSprite(mySprite)
+        timer.after(2500, function () {
+            controller.moveSprite(mySprite, 100, 100)
         })
     }
 }
@@ -911,6 +913,16 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight1, function (sp
     })
     tiles.setCurrentTilemap(tilemap`level3`)
 })
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile5`, function (sprite, location) {
+    if (ReadyForBoss) {
+        ReadyForBoss = false
+        color.startFade(color.GrayScale, color.originalPalette, 2000)
+        timer.after(2000, function () {
+            game.setGameOverMessage(true, "You escaped.. Or did you?")
+            game.gameOver(true)
+        })
+    }
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorLight5, function (sprite, location) {
     if (Already_Triggered1 == 0 && !(HasKey1 == 1)) {
         story.startCutscene(function () {
@@ -935,14 +947,14 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorMixed, function (spr
         HasKey1 = 4
         tiles.setCurrentTilemap(tilemap`level6`)
         mySprite.setPosition(248, 249)
-        Dialogue = 1
+        Dialogue = 0
         story.startCutscene(function () {
-            story.printCharacterText("Something’s off, this place looks…", "You")
+            story.printCharacterText("Something is off, this place looks..", "You")
             story.printCharacterText("Corrupt.", "You")
         })
         timer.after(2500, function () {
-            ReadyForBoss += 1
-            Dialogue = 0
+            ReadyForBoss = true
+            Dialogue = 1
         })
     }
     if (ReadyForBoss) {
@@ -967,7 +979,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     }
 })
 let lastDirection = 0
-let mySprite: Sprite = null
 let HasKey1 = 0
 let Already_Triggered1 = 0
 let waitTime = 0
@@ -975,6 +986,8 @@ let Dialogue = 0
 let ShieldEquipped = false
 let OrbEquipped = false
 let ReadyForBoss = false
+let mySprite: Sprite = null
+controller.moveSprite(mySprite, 100, 100)
 ReadyForBoss = false
 let DebugText = 0
 OrbEquipped = false
@@ -1005,12 +1018,8 @@ mySprite = sprites.create(img`
     . . . . . f f . . f f . . . . . 
     `, SpriteKind.Player)
 tiles.setCurrentTilemap(tilemap`level0`)
-info.setLife(3)
 scene.cameraFollowSprite(mySprite)
 mySprite.setPosition(248, 249)
-// Remove on launch
-// 
-controller.moveSprite(mySprite, 100, 100)
 game.onUpdate(function () {
     Animation_Handler()
     if (story.isMenuOpen() || Dialogue == 0) {
